@@ -1,7 +1,7 @@
 # dlmserve
 
 OpenAI-compatible HTTP serving for diffusion language models.
-LLaDA-8B-Instruct and LLaDA-1.5 in v0.1. Dream-7B in v0.1.1 ([issue #1](../../issues/1)).
+LLaDA-8B-Instruct and LLaDA-1.5 in v0.1. Dream-7B in v0.2.0 ([issue #1](https://github.com/iOptimizeThings/dlmserve/issues/1)).
 
 ## Why
 
@@ -61,7 +61,7 @@ uv run python benchmarks/compare_hf.py
 
 dlmserve batch=1 matches the HF reference loop (`reference/llada_reference.py`) to within measurement noise — token-identical at `temperature=0` (proven by `tests/test_reference_match.py`). The throughput gain comes from step-level batching and optional LocalLeap, not from changing the math.
 
-Full numbers, settings, and reproduction: [`docs/benchmarks.md`](docs/benchmarks.md) and [`docs/perf_log.md`](docs/perf_log.md).
+Full numbers, settings, and reproduction: [`docs/benchmarks.md`](https://github.com/iOptimizeThings/dlmserve/blob/main/docs/benchmarks.md) and [`docs/perf_log.md`](https://github.com/iOptimizeThings/dlmserve/blob/main/docs/perf_log.md).
 
 ## Supported models
 
@@ -69,9 +69,9 @@ Full numbers, settings, and reproduction: [`docs/benchmarks.md`](docs/benchmarks
 |---|---|---|
 | `gsai-ml/LLaDA-8B-Instruct` | ✓ v0.1 | ~5.6 GB |
 | `gsai-ml/LLaDA-1.5` | ✓ v0.1 | ~5.6 GB |
-| `Dream-org/Dream-v0-Instruct-7B` | v0.1.1 ([#1](../../issues/1)) | ~5.6 GB |
-| `diffusionfamily/diffullama` | v0.1.1 ([#3](../../issues/3)) | ~5.6 GB INT4 |
-| `LLaDA-2.0 (inclusionAI)` | v0.1.1 ([#2](../../issues/2)) | — |
+| `Dream-org/Dream-v0-Instruct-7B` | v0.2.0 ([#1](https://github.com/iOptimizeThings/dlmserve/issues/1)) | ~5.6 GB |
+| `diffusionfamily/diffullama` | v0.2.0 ([#3](https://github.com/iOptimizeThings/dlmserve/issues/3)) | ~5.6 GB INT4 |
+| `LLaDA-2.0 (inclusionAI)` | v0.3.0 ([#2](https://github.com/iOptimizeThings/dlmserve/issues/2)) | — |
 
 ## Batching
 
@@ -80,7 +80,7 @@ Automatic continuous batching at the denoising-step level. Concurrent requests s
 ## API
 
 OpenAI-compatible `/v1/chat/completions` with documented deviations
-([ADR 005](docs/adrs/005-openai-api-deviations.md)).
+([ADR 005](https://github.com/iOptimizeThings/dlmserve/blob/main/docs/adrs/005-openai-api-deviations.md)).
 
 Diffusion-specific parameters (beyond OpenAI spec):
 
@@ -107,30 +107,30 @@ Diffusion-specific parameters (beyond OpenAI spec):
 - **Linux x86_64 only** — macOS and Windows are not supported. Windows users: WSL2 with CUDA passthrough may work but is untested and unsupported.
 - **Single-GPU only** — multi-GPU TP is deferred to v0.5+.
 - **INT4 fits in 12 GB**; FP16 weights (~16 GB) need a 24 GB+ card.
-- **Docker image targets SM 8.0–8.9** (A100, H100, RTX 3090/4090/A6000). **Blackwell GPUs (RTX 50-series, SM 12.0) are not supported by the bundled image** — PyTorch 2.5.1 has no SM 12.0 kernels yet. On Blackwell, install from source (`pip install dlmserve`) against a PyTorch nightly that ships SM 12.0. See [`docs/docker.md`](docs/docker.md).
+- **Docker image targets SM 8.0–8.9** (A100, H100, RTX 3090/4090/A6000). **Blackwell GPUs (RTX 50-series, SM 12.0) are not supported by the bundled image** — PyTorch 2.5.1 has no SM 12.0 kernels yet. On Blackwell, install from source (`pip install dlmserve`) against a PyTorch nightly that ships SM 12.0. See [`docs/docker.md`](https://github.com/iOptimizeThings/dlmserve/blob/main/docs/docker.md).
 - **Attention backend is PyTorch SDPA.** FlashAttention-2 is optional (`pip install dlmserve[attn]`) and HF will use it automatically when present — **but FA2 also lacks SM 12.0 kernels**, so Blackwell stays on SDPA regardless.
-- **Per-step SSE streaming not yet implemented** — v0.1 emits one SSE chunk for the full output ([issue #5](../../issues/5)).
-- **`max_tokens` is a canvas size**, not a stop threshold — generation always fills the canvas and truncates at the first EOS. See [ADR 005](docs/adrs/005-openai-api-deviations.md).
+- **Per-step SSE streaming not yet implemented** — v0.1 emits one SSE chunk for the full output ([issue #5](https://github.com/iOptimizeThings/dlmserve/issues/5)).
+- **`max_tokens` is a canvas size**, not a stop threshold — generation always fills the canvas and truncates at the first EOS. See [ADR 005](https://github.com/iOptimizeThings/dlmserve/blob/main/docs/adrs/005-openai-api-deviations.md).
 
 ## Built on
 
 - [LLaDA: Large Language Diffusion with mAsking](https://arxiv.org/abs/2502.09992) — Nie et al., 2025. Model weights: `gsai-ml/LLaDA-8B-Instruct` (MIT).
 - [LocalLeap: Accelerating Diffusion Language Models via Local Determinism Propagation](https://arxiv.org/abs/2510.07081) — Klear Team, 2024. Apache-2.0.
 
-Full attribution: [`CREDITS.md`](CREDITS.md).
+Full attribution: [`CREDITS.md`](https://github.com/iOptimizeThings/dlmserve/blob/main/CREDITS.md).
 
 ## Roadmap
 
 ```
-v0.1.1  Dream-7B, LLaDA-2.0, DiffuLLaMA INT4, Fast-dLLM KV cache, per-step SSE
-v0.2    BD3-LMs block diffusion, AdaBlock-dLLM adaptive block size
+v0.2    Dream-7B, DiffuLLaMA INT4, Fast-dLLM KV cache, per-step SSE
+v0.3    LLaDA-2.0, BD3-LMs block diffusion, AdaBlock-dLLM adaptive block size
 v0.5+   Multi-GPU tensor parallelism
 ```
 
 ## Contributing
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md). Issues and PRs welcome.
+See [`CONTRIBUTING.md`](https://github.com/iOptimizeThings/dlmserve/blob/main/CONTRIBUTING.md). Issues and PRs welcome.
 
 ## License
 
-MIT — see [`LICENSE`](LICENSE).
+MIT — see [`LICENSE`](https://github.com/iOptimizeThings/dlmserve/blob/main/LICENSE).

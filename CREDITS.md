@@ -45,6 +45,21 @@ Every adapted technique is listed here per the licensing protocol documented in 
 
 ---
 
+## Dream-7B — Diffusion Large Language Model
+
+- **Paper**: Lin et al., "Dream 7B: Diffusion Large Language Models", arXiv:2508.15487 (Aug 2025)
+- **Source repo**: https://github.com/HKUNLP/Dream
+- **Model**: https://huggingface.co/Dream-org/Dream-v0-Instruct-7B
+- **License**: Apache 2.0 (confirmed on HF model card and GitHub repo, 2026-05-25)
+- **Adapted in** (v0.2.0, planned):
+  - `dlmserve/models/dream.py` — model loader for Dream-7B (~5.6 GB INT4).
+  - `dlmserve/sampler.py` — extended `confidence_metric` enum to support Dream's `alg` strategies (`top1_prob`, `margin`, `entropy`, `random`) and `alg_temp` ordering noise per ADR 006.
+  - `dlmserve/api/protocol.py` — added `top_p` and `alg_temp` params to ChatCompletionRequest.
+- **What we used**: Discrete masked-diffusion inference contract from paper §3-4; the four `alg` strategies for unmasking-order selection; `alg_temp` noise injection; LLaMA-derived tokenizer auto-discovery for mask token.
+- **Modifications in dlmserve's reimplementation**: integrated into the existing absorb-and-resample loop (`denoise_loop.py`); per-model LocalLeap thresholds calibrated separately for Dream-7B; mask token auto-discovered from tokenizer rather than hard-coded (Dream doesn't have a fixed mask ID across versions like LLaDA does).
+
+---
+
 ## LocalLeap — Local-Aware Anchor Propagation for Diffusion LLM Inference
 
 - **Paper**: Kong et al., "LocalLeap: Local-Aware Anchor Propagation for Diffusion Language Model Inference Acceleration", arXiv:2510.07081 (Oct 2025)
