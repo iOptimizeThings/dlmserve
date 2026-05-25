@@ -63,7 +63,7 @@ Full numbers, settings, and reproduction: [`docs/benchmarks.md`](docs/benchmarks
 | `gsai-ml/LLaDA-1.5` | ✓ v0.1 | ~5.6 GB |
 | `Dream-org/Dream-v0-Instruct-7B` | v0.1.1 ([#1](../../issues/1)) | ~5.6 GB |
 | `diffusionfamily/diffullama` | v0.1.1 ([#3](../../issues/3)) | ~5.6 GB INT4 |
-| LLaDA-2.0 (inclusionAI) | v0.1.1 ([#2](../../issues/2)) | — |
+| `LLaDA-2.0 (inclusionAI)` | v0.1.1 ([#2](../../issues/2)) | — |
 
 ## Batching
 
