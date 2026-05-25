@@ -13,8 +13,6 @@ COPY dlmserve/ dlmserve/
 
 RUN uv pip install --system .
 
-RUN uv pip install --system bitsandbytes>=0.43.0
-
 VOLUME /root/.cache/huggingface
 
 EXPOSE 8000

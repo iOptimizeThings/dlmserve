@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1.1 — 2026-05-25
+
+- Fixed: `pip install dlmserve` followed by `dlmserve` crashed on first run with `PackageNotFoundError: bitsandbytes`. `bitsandbytes` is now a runtime dependency (was previously a dev extra), matching the default `int4` dtype.
+- Fixed: PyPI Homepage URL pointed to a domain that does not exist. Project URLs now point to the GitHub repo.
+
 ## v0.1.0 — 2026-05-24
 
 First public release.

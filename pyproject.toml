@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dlmserve"
-version = "0.1.0"
+version = "0.1.1"
 description = "First OSS production-grade serving engine for diffusion language models"
 readme = "README.md"
 license = { text = "MIT" }
@@ -21,6 +21,7 @@ dependencies = [
     "torch>=2.5,<3.0",
     "transformers>=4.44.0,<5.0",
     "accelerate>=0.34.0",
+    "bitsandbytes>=0.43.0",
     "fastapi>=0.115.0",
     "uvicorn[standard]>=0.30.0",
     "pydantic>=2.8.0",
@@ -36,7 +37,6 @@ dev = [
     "ruff>=0.7.0",
     "pyright>=1.1.385",
     "pre-commit>=4.0.0",
-    "bitsandbytes>=0.43.0",
 ]
 # flash-attn requires CUDA + compilation; install separately:
 #   pip install flash-attn --no-build-isolation

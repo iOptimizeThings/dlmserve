@@ -123,7 +123,7 @@ app = FastAPI(
         "thresholds are calibrated and applied automatically.\n\n"
         "OpenAI-compatible `/v1/chat/completions` with documented deviations."
     ),
-    version="0.1.0",
+    version="0.1.1",
     lifespan=lifespan,
 )
 
