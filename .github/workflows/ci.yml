@@ -21,7 +21,7 @@ jobs:
         run: pip install uv
 
       - name: Install dependencies
-        run: uv sync --no-install-project
+        run: uv sync --extra dev
 
       - name: Ruff lint
         run: uv run ruff check dlmserve tests benchmarks
@@ -40,7 +40,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: uv sync
+        run: uv sync --extra dev
 
       - name: GPU quality suite
         env:
