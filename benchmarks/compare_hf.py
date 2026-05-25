@@ -16,10 +16,10 @@ import argparse
 import time
 
 import torch
+from reference.llada_reference import generate as hf_generate
 
 from dlmserve.engine import Engine
 from dlmserve.sampler import SamplingParams
-from reference.llada_reference import generate as hf_generate
 
 DEFAULT_MODEL_ID = "gsai-ml/LLaDA-8B-Instruct"
 
