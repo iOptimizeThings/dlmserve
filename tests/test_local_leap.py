@@ -147,7 +147,7 @@ def test_local_leap_handles_boundary_anchors():
     B, L, V = 1, 5, 10
     x = torch.full((B, L), MASK_ID, dtype=torch.long)
     logits = torch.full((B, L, V), -10.0)
-    logits[0, 0, 3] = 50.0   # anchor at left boundary
+    logits[0, 0, 3] = 50.0  # anchor at left boundary
     logits[0, L - 1, 3] = 50.0  # anchor at right boundary
 
     mask_index = x == MASK_ID

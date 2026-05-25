@@ -32,7 +32,7 @@ MMLU_SUBJECTS = [
 QUESTIONS_PER_SUBJECT = 25
 CHOICES = ["A", "B", "C", "D"]
 
-GEN_LENGTH = 16   # short — just need the answer letter
+GEN_LENGTH = 16  # short — just need the answer letter
 NUM_STEPS = 16
 BLOCK_LENGTH = 16
 
@@ -96,7 +96,7 @@ def _run_reference(prompts: list[str], answers: list[str], loaded: object) -> fl
             params=PARAMS,
             mask_id=mask_id,
         )
-        body = tok.decode(out[0, input_ids.shape[1]:].tolist(), skip_special_tokens=True)
+        body = tok.decode(out[0, input_ids.shape[1] :].tolist(), skip_special_tokens=True)
         if _extract_answer(body) == answer:
             correct += 1
         torch.cuda.empty_cache()

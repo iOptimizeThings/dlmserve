@@ -117,6 +117,7 @@ class Engine:
     def local_leap_params(self, base: SamplingParams) -> SamplingParams:
         """Return base params with model-appropriate LocalLeap thresholds enabled."""
         from dataclasses import replace as _replace
+
         model_id: str = getattr(self._loaded.model.config, "_name_or_path", "")
         kappa, tau, radius = _LOCAL_LEAP_MODEL_DEFAULTS.get(model_id, _LOCAL_LEAP_FALLBACK)
         return _replace(
@@ -191,7 +192,9 @@ class Engine:
                 log.exception("step_batch failed — aborting batch of %d requests", len(batch))
                 for req in batch:
                     if req._future is not None and not req._future.done():
-                        req._future.set_exception(RuntimeError("denoising step failed; see server logs"))
+                        req._future.set_exception(
+                            RuntimeError("denoising step failed; see server logs")
+                        )
                     with suppress(Exception):
                         self._scheduler.complete(req)
                 await asyncio.sleep(0)

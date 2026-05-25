@@ -87,8 +87,7 @@ class ChatCompletionRequest(_StrictModel):
             )
         if self.top_k is not None and self.top_k > 1:
             raise ValueError(
-                "top_k > 1 is not supported in v0.1. "
-                "Use temperature > 0 for stochasticity."
+                "top_k > 1 is not supported in v0.1. Use temperature > 0 for stochasticity."
             )
         if self.max_tokens is not None and self.max_tokens == 0:
             raise ValueError("max_tokens=0 is not valid; diffusion has no zero-length output.")

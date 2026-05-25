@@ -116,9 +116,7 @@ def test_logits_close_at_fixed_input(llada):
     here so a future custom-kernel path can be diff'd against the same bar.
     """
     prompt, _ = _encode_prompt(llada.tokenizer, PROMPTS[0], llada.device)
-    x = torch.full(
-        (1, prompt.shape[1] + 32), MASK_ID, dtype=torch.long, device=llada.device
-    )
+    x = torch.full((1, prompt.shape[1] + 32), MASK_ID, dtype=torch.long, device=llada.device)
     x[:, : prompt.shape[1]] = prompt
 
     a = llada.model(x).logits.float()

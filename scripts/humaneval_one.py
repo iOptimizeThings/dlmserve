@@ -4,6 +4,7 @@ Usage:
     uv run python scripts/humaneval_one.py
     uv run python scripts/humaneval_one.py --model gsai-ml/LLaDA-1.5 --steps 128 --tokens 256 --idx 0
 """
+
 from __future__ import annotations
 
 import argparse

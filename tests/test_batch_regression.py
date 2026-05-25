@@ -64,15 +64,14 @@ def test_single_batch_determinism_matches_reference(engine: Engine) -> None:
         params=params,
         mask_id=engine._loaded.mask_id,
     )
-    ref_body = ref_out[:, input_ids.shape[1]:]
+    ref_body = ref_out[:, input_ids.shape[1] :]
 
     # Engine.generate() via the scheduler loop
     ours = engine.generate([prompt], params)
     ours_body = ours[0].output_ids.unsqueeze(0)
 
     assert torch.equal(ref_body, ours_body), (
-        f"determinism broken: ref={ref_body[0,:10].tolist()} "
-        f"ours={ours_body[0,:10].tolist()}"
+        f"determinism broken: ref={ref_body[0, :10].tolist()} ours={ours_body[0, :10].tolist()}"
     )
 
 

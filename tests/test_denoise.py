@@ -54,9 +54,7 @@ def test_commit_respects_block_end_clip():
     logits = torch.full((1, 6, 10), -10.0)
     logits[..., 5] = 10.0
     mask_index = x == mask_id
-    new_x = commit_top_k_by_confidence(
-        x, logits, mask_index, torch.tensor([3]), block_end_abs=3
-    )
+    new_x = commit_top_k_by_confidence(x, logits, mask_index, torch.tensor([3]), block_end_abs=3)
     # Only positions [0, 1, 2] can be committed; [3, 4, 5] stay masked.
     assert (new_x[0, :3] == 5).all()
     assert (new_x[0, 3:] == mask_id).all()

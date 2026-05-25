@@ -12,9 +12,7 @@ from dlmserve.kv_cache import CacheConfig, DiffusionKVCache
 
 
 def _make_cache() -> DiffusionKVCache:
-    return DiffusionKVCache(
-        CacheConfig(num_layers=4, num_heads=8, head_dim=64, max_seq_len=128)
-    )
+    return DiffusionKVCache(CacheConfig(num_layers=4, num_heads=8, head_dim=64, max_seq_len=128))
 
 
 def test_cache_is_disabled_by_default():

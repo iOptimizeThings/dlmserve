@@ -25,11 +25,24 @@ def main() -> None:
     parser = argparse.ArgumentParser(prog="chat")
     parser.add_argument("--model", default="gsai-ml/LLaDA-8B-Instruct", help="HuggingFace model ID")
     parser.add_argument("--steps", type=int, default=128, help="Denoising steps (default: 128)")
-    parser.add_argument("--max-tokens", type=int, default=256, help="Output canvas length in tokens (default: 256)")
-    parser.add_argument("--temperature", type=float, default=0.0, help="Sampling temperature — 0.0 recommended for diffusion LLMs (default: 0.0)")
+    parser.add_argument(
+        "--max-tokens", type=int, default=256, help="Output canvas length in tokens (default: 256)"
+    )
+    parser.add_argument(
+        "--temperature",
+        type=float,
+        default=0.0,
+        help="Sampling temperature — 0.0 recommended for diffusion LLMs (default: 0.0)",
+    )
     parser.add_argument("--local-leap", action="store_true", help="Enable LocalLeap acceleration")
-    parser.add_argument("--dtype", default="int4", choices=["int4", "bf16"], help="Model precision (default: int4)")
-    parser.add_argument("--system", default=DEFAULT_SYSTEM_PROMPT, help="System prompt (pass empty string to disable)")
+    parser.add_argument(
+        "--dtype", default="int4", choices=["int4", "bf16"], help="Model precision (default: int4)"
+    )
+    parser.add_argument(
+        "--system",
+        default=DEFAULT_SYSTEM_PROMPT,
+        help="System prompt (pass empty string to disable)",
+    )
     args = parser.parse_args()
 
     print(f"Loading {args.model} ({args.dtype})...")
@@ -58,7 +71,9 @@ def main() -> None:
         except Exception:
             print("(model chat template does not support system role — running without)")
 
-    print(f"Ready  steps={args.steps}  max_tokens={args.max_tokens}  temp={args.temperature}  local_leap={args.local_leap}  system={system_enabled}")
+    print(
+        f"Ready  steps={args.steps}  max_tokens={args.max_tokens}  temp={args.temperature}  local_leap={args.local_leap}  system={system_enabled}"
+    )
     print('Type "quit" or Ctrl-C to exit.\n')
 
     while True:

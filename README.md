@@ -1,3 +1,5 @@
+![dlmserve](https://github.com/iOptimizeThings/dlmserve/blob/main/docs/assets/logo.png?raw=true)
+
 # dlmserve
 
 OpenAI-compatible HTTP serving for diffusion language models.

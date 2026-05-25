@@ -42,7 +42,9 @@ class DiffusionKVCache:
         self.config = config
         self.enabled = False
         self._committed_positions: dict[int, torch.Tensor] = {}
-        log.debug("KV cache init (inert)", extra={"num_layers": config.num_layers, "enabled": False})
+        log.debug(
+            "KV cache init (inert)", extra={"num_layers": config.num_layers, "enabled": False}
+        )
 
     def admit_request(self, req_id: int, seq_len: int) -> None:
         self._committed_positions[req_id] = torch.zeros(seq_len, dtype=torch.bool)

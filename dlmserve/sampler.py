@@ -212,9 +212,9 @@ def compute_transfer_schedule(mask_count: torch.Tensor, steps: int) -> torch.Ten
     mask_count = mask_count.reshape(-1, 1).to(torch.int64)
     base = mask_count // steps
     remainder = mask_count % steps
-    sched = torch.zeros(
-        mask_count.size(0), steps, device=mask_count.device, dtype=torch.int64
-    ) + base
+    sched = (
+        torch.zeros(mask_count.size(0), steps, device=mask_count.device, dtype=torch.int64) + base
+    )
     for i in range(mask_count.size(0)):
         sched[i, : int(remainder[i].item())] += 1
     return sched

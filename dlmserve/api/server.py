@@ -254,19 +254,19 @@ async def chat_completions(
             prompt_len = input_ids.shape[1]
             gen_ids = result_seq[:, prompt_len:]
             text = engine.tokenizer.batch_decode(gen_ids, skip_special_tokens=True)[0]
-            return [GenerationOutput(
-                prompt_ids=result_seq[0, :prompt_len],
-                output_ids=gen_ids[0],
-                text=text,
-            )]
+            return [
+                GenerationOutput(
+                    prompt_ids=result_seq[0, :prompt_len],
+                    output_ids=gen_ids[0],
+                    text=text,
+                )
+            ]
 
         outputs = await asyncio.to_thread(_run_single)
     else:
         # Normal async path via the engine loop
         try:
-            outputs = await engine.generate_async(
-                [rendered_prompt], params, prerendered=True
-            )
+            outputs = await engine.generate_async([rendered_prompt], params, prerendered=True)
         except asyncio.CancelledError:
             record_request_done(0)
             raise HTTPException(status_code=503, detail="server shutting down") from None

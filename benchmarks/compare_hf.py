@@ -68,15 +68,27 @@ def main() -> None:
 
     print("Warming up...")
     engine.generate([TEST_PROMPTS[0]], params)
-    hf_generate(model, input_ids[0], steps=args.steps, gen_length=args.gen_length,
-                block_length=args.gen_length, mask_id=mask_id)
+    hf_generate(
+        model,
+        input_ids[0],
+        steps=args.steps,
+        gen_length=args.gen_length,
+        block_length=args.gen_length,
+        mask_id=mask_id,
+    )
 
     # HF reference: batch=1 sequential
     print(f"\nHF reference  (batch=1 × {N} sequential)...")
     t0 = time.perf_counter()
     for ids in input_ids:
-        hf_generate(model, ids, steps=args.steps, gen_length=args.gen_length,
-                    block_length=args.gen_length, mask_id=mask_id)
+        hf_generate(
+            model,
+            ids,
+            steps=args.steps,
+            gen_length=args.gen_length,
+            block_length=args.gen_length,
+            mask_id=mask_id,
+        )
     hf_tps = (N * args.gen_length) / (time.perf_counter() - t0)
     print(f"  {hf_tps:.1f} tok/s")
 
@@ -100,8 +112,8 @@ def main() -> None:
     print(f"  {'Path':<36} {'tok/s':>7}  {'vs HF':>6}")
     print("  " + "-" * 52)
     print(f"  {'HF reference (batch=1 sequential)':<36} {hf_tps:>7.1f}  {'1.00×':>6}")
-    print(f"  {'dlmserve batch=1 sequential':<36} {dlm_b1_tps:>7.1f}  {dlm_b1_tps/hf_tps:>5.2f}×")
-    print(f"  {'dlmserve batch=' + str(N):<36} {dlm_bN_tps:>7.1f}  {dlm_bN_tps/hf_tps:>5.2f}×")
+    print(f"  {'dlmserve batch=1 sequential':<36} {dlm_b1_tps:>7.1f}  {dlm_b1_tps / hf_tps:>5.2f}×")
+    print(f"  {'dlmserve batch=' + str(N):<36} {dlm_bN_tps:>7.1f}  {dlm_bN_tps / hf_tps:>5.2f}×")
     print("=" * 54)
 
 

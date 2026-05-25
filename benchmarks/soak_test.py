@@ -125,7 +125,7 @@ async def run(url: str, duration: int, concurrency: int) -> int:
     total = sum(status_counts.values())
     ok = status_counts[200]
     err = total - ok
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"Total requests : {total}")
     print(f"OK (200)       : {ok}")
     print(f"Errors         : {err}  {dict(status_counts)}")

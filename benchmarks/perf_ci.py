@@ -58,7 +58,9 @@ def _warmup(engine: Engine) -> None:
     engine.generate([TEST_PROMPTS[0]], PARAMS_512)
 
 
-def benchmark_tokens_per_sec(engine: Engine, params: SamplingParams = PARAMS_512) -> dict[str, float]:
+def benchmark_tokens_per_sec(
+    engine: Engine, params: SamplingParams = PARAMS_512
+) -> dict[str, float]:
     _warmup(engine)
 
     # batch=1
@@ -77,7 +79,9 @@ def benchmark_tokens_per_sec(engine: Engine, params: SamplingParams = PARAMS_512
     return {"tps_batch1": tps_batch1, "tps_batch8": tps_batch8}
 
 
-def benchmark_step_duration(engine: Engine, params: SamplingParams = PARAMS_512) -> dict[str, float]:
+def benchmark_step_duration(
+    engine: Engine, params: SamplingParams = PARAMS_512
+) -> dict[str, float]:
     """Measure p50 and p99 step duration via wall-clock over a batch=4 run."""
     from dlmserve.denoise_loop import init_state, step_batch
 
@@ -125,7 +129,7 @@ def benchmark_step_duration(engine: Engine, params: SamplingParams = PARAMS_512)
 def benchmark_gpu_mem(engine: Engine, params: SamplingParams = PARAMS_512) -> dict[str, float]:
     torch.cuda.reset_peak_memory_stats()
     engine.generate(TEST_PROMPTS, params)
-    peak_gb = torch.cuda.max_memory_allocated() / 1024 ** 3
+    peak_gb = torch.cuda.max_memory_allocated() / 1024**3
     return {"gpu_peak_gb": peak_gb}
 
 
@@ -176,7 +180,9 @@ def main() -> None:
 
     print("Benchmarking step duration (baseline)...")
     steps = benchmark_step_duration(engine, PARAMS_512)
-    print(f"  p50: {steps['step_p50_ms']:.1f} ms  p99: {steps['step_p99_ms']:.1f} ms  ratio: {steps['p99_over_p50']:.2f}×  ({steps['num_steps_executed']} steps)")
+    print(
+        f"  p50: {steps['step_p50_ms']:.1f} ms  p99: {steps['step_p99_ms']:.1f} ms  ratio: {steps['p99_over_p50']:.2f}×  ({steps['num_steps_executed']} steps)"
+    )
 
     print("Benchmarking GPU mem peak (baseline)...")
     mem = benchmark_gpu_mem(engine, PARAMS_512)
@@ -188,7 +194,9 @@ def main() -> None:
         params_ll = _params(use_local_leap=True)
         print("Benchmarking step duration (LocalLeap)...")
         steps_ll = benchmark_step_duration(engine, params_ll)
-        print(f"  p50: {steps_ll['step_p50_ms']:.1f} ms  p99: {steps_ll['step_p99_ms']:.1f} ms  ratio: {steps_ll['p99_over_p50']:.2f}×  ({steps_ll['num_steps_executed']} steps)")
+        print(
+            f"  p50: {steps_ll['step_p50_ms']:.1f} ms  p99: {steps_ll['step_p99_ms']:.1f} ms  ratio: {steps_ll['p99_over_p50']:.2f}×  ({steps_ll['num_steps_executed']} steps)"
+        )
 
         print("Benchmarking GPU mem peak (LocalLeap)...")
         mem_ll = benchmark_gpu_mem(engine, params_ll)
@@ -217,7 +225,7 @@ def main() -> None:
             f"| Tokens/sec batch=1 (baseline) | {tps['tps_batch1']:.1f} | — |",
             f"| Tokens/sec batch=8 (baseline) | {tps['tps_batch8']:.1f} | — |",
         ]
-        if 'tps_batch1_local_leap' in tps:
+        if "tps_batch1_local_leap" in tps:
             rows += [
                 f"| Tokens/sec batch=1 (LocalLeap) | {tps['tps_batch1_local_leap']:.1f} | — |",
                 f"| Tokens/sec batch=8 (LocalLeap) | {tps['tps_batch8_local_leap']:.1f} | — |",

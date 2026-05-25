@@ -7,6 +7,7 @@ Usage:
     uv run python scripts/calibrate_local_leap.py
     uv run python scripts/calibrate_local_leap.py --model gsai-ml/LLaDA-1.5
 """
+
 from __future__ import annotations
 
 import argparse
@@ -25,13 +26,14 @@ STEPS = 16
 GEN_LENGTH = 256
 N_PROBLEMS = 20
 
-KAPPA_VALUES  = [0.5, 0.6, 0.7, 0.8, 0.9]
-TAU_VALUES    = [0.6, 0.75]
+KAPPA_VALUES = [0.5, 0.6, 0.7, 0.8, 0.9]
+TAU_VALUES = [0.6, 0.75]
 RADIUS_VALUES = [4]
 
 
 def _load_humaneval(n: int) -> list[dict]:
     from datasets import load_dataset
+
     ds = load_dataset("openai_humaneval", split="test", trust_remote_code=True)
     return list(ds.select(range(n)))
 
@@ -81,14 +83,16 @@ def main() -> None:
     problems = _load_humaneval(args.n)
 
     base_params = SamplingParams(
-        num_denoising_steps=STEPS, gen_length=GEN_LENGTH,
-        block_length=GEN_LENGTH, temperature=0.0,
+        num_denoising_steps=STEPS,
+        gen_length=GEN_LENGTH,
+        block_length=GEN_LENGTH,
+        temperature=0.0,
     )
 
     print("Running baseline...")
     t0 = time.perf_counter()
     baseline = _eval(engine, problems, base_params)
-    print(f"  Baseline pass@1 = {baseline:.3f}  ({time.perf_counter()-t0:.0f}s)\n")
+    print(f"  Baseline pass@1 = {baseline:.3f}  ({time.perf_counter() - t0:.0f}s)\n")
 
     print(f"{'κ':>5} {'τ':>5} {'W':>3} {'pass@1':>8} {'diff':>7} {'gate':>6}")
     print("-" * 40)
@@ -99,8 +103,10 @@ def main() -> None:
         for tau in TAU_VALUES:
             for radius in RADIUS_VALUES:
                 params = SamplingParams(
-                    num_denoising_steps=STEPS, gen_length=GEN_LENGTH,
-                    block_length=GEN_LENGTH, temperature=0.0,
+                    num_denoising_steps=STEPS,
+                    gen_length=GEN_LENGTH,
+                    block_length=GEN_LENGTH,
+                    temperature=0.0,
                     use_local_leap=True,
                     local_leap_anchor_threshold=kappa,
                     local_leap_neighbor_threshold=tau,
@@ -111,7 +117,9 @@ def main() -> None:
                 diff = abs(score - baseline)
                 gate = "✓" if diff <= 0.02 else "✗"
                 elapsed = time.perf_counter() - t0
-                print(f"{kappa:>5.2f} {tau:>5.2f} {radius:>3d} {score:>8.3f} {diff:>+7.3f} {gate:>6}  ({elapsed:.0f}s)")
+                print(
+                    f"{kappa:>5.2f} {tau:>5.2f} {radius:>3d} {score:>8.3f} {diff:>+7.3f} {gate:>6}  ({elapsed:.0f}s)"
+                )
                 if diff <= 0.02:
                     best.append((kappa, tau, radius, score))
 

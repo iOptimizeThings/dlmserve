@@ -55,7 +55,7 @@ def _run_reference(engine: Engine, prompt: str) -> tuple[list[int], str]:
         params=PARAMS,
         mask_id=loaded.mask_id,
     )
-    body_ids = out[0, input_ids.shape[1]:].tolist()
+    body_ids = out[0, input_ids.shape[1] :].tolist()
     text = tok.decode(body_ids, skip_special_tokens=True)
     return body_ids, text
 
@@ -91,8 +91,8 @@ def test_bit_exact_single_batch(
         if got_ids != ref_ids:
             mismatches.append(f"[{i:02d}] got={got_ids[:8]} ref={ref_ids[:8]}")
 
-    assert not mismatches, (
-        f"{len(mismatches)}/50 prompts failed bit-exact match:\n" + "\n".join(mismatches)
+    assert not mismatches, f"{len(mismatches)}/50 prompts failed bit-exact match:\n" + "\n".join(
+        mismatches
     )
 
 
@@ -103,10 +103,11 @@ def test_bit_exact_single_batch(
 
 @pytest.mark.slow
 @pytest.mark.gpu
-@pytest.mark.xfail(reason="batched mode not guaranteed token-exact — LSB diffs from reduction order expected", strict=False)
-def test_bit_exact_batched(
-    engine: Engine, reference_outputs: list[tuple[list[int], str]]
-) -> None:
+@pytest.mark.xfail(
+    reason="batched mode not guaranteed token-exact — LSB diffs from reduction order expected",
+    strict=False,
+)
+def test_bit_exact_batched(engine: Engine, reference_outputs: list[tuple[list[int], str]]) -> None:
     """50/50 prompts: batch=8 engine output vs raw denoise() reference.
 
     Note: batched mode is not guaranteed token-exact — LSB-level
@@ -139,9 +140,7 @@ def test_bit_exact_batched(
 
 @pytest.mark.slow
 @pytest.mark.gpu
-def test_bleu_batched(
-    engine: Engine, reference_outputs: list[tuple[list[int], str]]
-) -> None:
+def test_bleu_batched(engine: Engine, reference_outputs: list[tuple[list[int], str]]) -> None:
     """Batched mode output must score BLEU ≥ 0.95 vs single-request denoise() reference."""
     hypotheses: list[str] = []
     references: list[str] = []
@@ -184,6 +183,6 @@ def test_determinism_run_twice(engine: Engine) -> None:
         if ids_a != ids_b:
             mismatches.append(f"[{i:02d}] run1={ids_a[:6]} run2={ids_b[:6]}")
 
-    assert not mismatches, (
-        f"{len(mismatches)}/50 prompts are non-deterministic:\n" + "\n".join(mismatches)
+    assert not mismatches, f"{len(mismatches)}/50 prompts are non-deterministic:\n" + "\n".join(
+        mismatches
     )

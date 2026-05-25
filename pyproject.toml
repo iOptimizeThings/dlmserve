@@ -92,6 +92,9 @@ ignore = [
 "benchmarks/*" = [
     "ANN",
 ]
+"reference/*" = [
+    "ANN", "I", "E", "W", "F", "B", "C4", "UP", "SIM", "TCH", "TID",
+]
 
 [tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "parents"

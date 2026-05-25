@@ -54,7 +54,7 @@ def _execute_completion(prompt_code: str, completion: str, test_code: str) -> bo
 {completion}
 
 {test_code}
-check({prompt_code.split('def ')[1].split('(')[0].strip()})
+check({prompt_code.split("def ")[1].split("(")[0].strip()})
 """)
     with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
         f.write(full_code)
@@ -104,7 +104,7 @@ def _eval_reference(problems: list[dict], loaded: object) -> float:
             params=PARAMS,
             mask_id=mask_id,
         )
-        text = tok.decode(out[0, input_ids.shape[1]:].tolist(), skip_special_tokens=True)
+        text = tok.decode(out[0, input_ids.shape[1] :].tolist(), skip_special_tokens=True)
         ok = _execute_completion(prob["prompt"], text, prob["test"])
         if ok:
             passed += 1

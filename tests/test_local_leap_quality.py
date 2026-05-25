@@ -92,7 +92,9 @@ def _mmlu_extract(text: str) -> str | None:
     return m.group(1) if m else None
 
 
-def _mmlu_eval(engine: Engine, prompts: list[str], answers: list[str], params: SamplingParams) -> tuple[int, int]:
+def _mmlu_eval(
+    engine: Engine, prompts: list[str], answers: list[str], params: SamplingParams
+) -> tuple[int, int]:
     correct = 0
     for i in range(0, len(prompts), 8):
         batch = prompts[i : i + 8]
@@ -131,7 +133,9 @@ def test_local_leap_mmlu_within_1pp_of_baseline(
     prompts, answers = mmlu_data
     baseline_correct, n = _mmlu_eval(engine, prompts, answers, MMLU_PARAMS)
     ll_correct, _ = _mmlu_eval(engine, prompts, answers, engine.local_leap_params(MMLU_PARAMS))
-    allowed_delta = round(0.01 * n)  # 1pp expressed as question count — exact integer, no float boundary
+    allowed_delta = round(
+        0.01 * n
+    )  # 1pp expressed as question count — exact integer, no float boundary
     assert abs(ll_correct - baseline_correct) <= allowed_delta, (
         f"LocalLeap MMLU gate FAILED: baseline={baseline_correct}/{n} "
         f"local_leap={ll_correct}/{n} diff={abs(ll_correct - baseline_correct)} (limit {allowed_delta} questions = 1pp)\n"
@@ -168,7 +172,7 @@ def _he_execute(prompt_code: str, completion: str, test_code: str) -> bool:
 {completion}
 
 {test_code}
-check({prompt_code.split('def ')[1].split('(')[0].strip()})
+check({prompt_code.split("def ")[1].split("(")[0].strip()})
 """)
     with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
         f.write(full_code)

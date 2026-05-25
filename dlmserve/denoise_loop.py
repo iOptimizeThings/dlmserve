@@ -40,13 +40,13 @@ from dlmserve.sampler import (
 class DenoiseState:
     """Per-request denoising state. Lives for the duration of one generate()."""
 
-    seq: torch.Tensor            # (1, prompt_len + gen_length)
-    committed: torch.Tensor      # (1, prompt_len + gen_length) bool
+    seq: torch.Tensor  # (1, prompt_len + gen_length)
+    committed: torch.Tensor  # (1, prompt_len + gen_length) bool
     prompt_len: int
     gen_length: int
     block_length: int
     steps_per_block: int
-    schedule: torch.Tensor       # (1, steps_per_block) int64
+    schedule: torch.Tensor  # (1, steps_per_block) int64
     params: SamplingParams = field(default_factory=SamplingParams)
     block_idx: int = 0
     step_in_block: int = 0
@@ -153,7 +153,9 @@ def step_batch(
         offsets.append(offset)
         batch_seq[i, offset : offset + seq_len] = s.seq[0]
         batch_attn[i, offset : offset + seq_len] = 1
-        position_ids[i, offset : offset + seq_len] = torch.arange(seq_len, dtype=torch.long, device=device)
+        position_ids[i, offset : offset + seq_len] = torch.arange(
+            seq_len, dtype=torch.long, device=device
+        )
 
     # block_end_abs in padded coordinate system.
     # = offset_i + prompt_len_i + (block_idx_i+1)*block_length_i
@@ -301,8 +303,8 @@ def denoise(
             state.committed = state.seq != mask_id
 
             block_remaining = (
-                state.seq[:, state.block_start_abs : state.block_end_abs] == mask_id
-            ).sum().item()
+                (state.seq[:, state.block_start_abs : state.block_end_abs] == mask_id).sum().item()
+            )
             if block_remaining == 0:
                 break
 
