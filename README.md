@@ -10,12 +10,20 @@ Diffusion LLMs use bidirectional attention, a fixed-length canvas, and confidenc
 ## Quick start
 
 ```bash
+# Install
+pipx install dlmserve
+
+# Or if you're already inside a venv / conda env
 pip install dlmserve
+
+# Don't have pipx? One-time setup:
+#   sudo apt install pipx && pipx ensurepath
+#   (then open a new terminal)
 
 # Serve LLaDA-8B-Instruct (downloads ~5.6 GB INT4 weights on first run)
 dlmserve
 
-# Or with Docker
+# Or with Docker (no Python install needed)
 docker run --gpus all -p 8000:8000 \
   -e DLMSERVE_MODEL=gsai-ml/LLaDA-8B-Instruct \
   ghcr.io/iOptimizeThings/dlmserve:latest
