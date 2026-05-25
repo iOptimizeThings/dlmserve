@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+.git/
+tests/
+benchmarks/
+docs/
+reference/
+scripts/
+dist/
+*.egg-info/
+.ruff_cache/
+.pytest_cache/
+.pyright/
+uv.lock.bak

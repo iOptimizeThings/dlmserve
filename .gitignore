@@ -1,0 +1,70 @@
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+
+# Linting / formatting / type checking caches
+.ruff_cache/
+.mypy_cache/
+.pyright/
+pyrightconfig.json
+.dmypy.json
+
+# Model weights — never commit these
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.gguf
+
+# HuggingFace cache (if pointed inside the repo)
+.cache/
+
+# Secrets / env
+.env
+.env.*
+*.key
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Profiling
+*.nsys-rep
+*.nvtx
+*.qdrep
+
+# Benchmarks / perf logs (committed selectively)
+# docs/perf_log.md is committed; raw data files are not
+*.json.bak
+
+# Local-only working files
+.local/
+
+# Docs build
+site/
+_build/

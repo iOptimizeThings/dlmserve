@@ -1,0 +1,134 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dlmserve"
+version = "0.1.0"
+description = "First OSS production-grade serving engine for diffusion language models"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+keywords = ["diffusion", "language-model", "serving", "inference", "llada"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "torch>=2.5,<3.0",
+    "transformers>=4.44.0,<5.0",
+    "accelerate>=0.34.0",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.30.0",
+    "pydantic>=2.8.0",
+    "prometheus-client>=0.21.0",
+    "sacrebleu>=2.6.0",
+    "datasets>=4.8.5",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "ruff>=0.7.0",
+    "pyright>=1.1.385",
+    "pre-commit>=4.0.0",
+    "bitsandbytes>=0.43.0",
+]
+# flash-attn requires CUDA + compilation; install separately:
+#   pip install flash-attn --no-build-isolation
+# For SM 12.0 (RTX 5070) you may need: FLASH_ATTENTION_FORCE_BUILD=TRUE
+attn = [
+    "flash-attn>=2.6.0",
+]
+
+[project.scripts]
+dlmserve = "dlmserve.api.server:main"
+
+[project.urls]
+Homepage = "https://github.com/iOptimizeThings/dlmserve"
+Repository = "https://github.com/iOptimizeThings/dlmserve"
+Issues = "https://github.com/iOptimizeThings/dlmserve/issues"
+Changelog = "https://github.com/iOptimizeThings/dlmserve/blob/main/CHANGELOG.md"
+
+# ---------------------------------------------------------------------------
+# Ruff
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["dlmserve", "tests", "benchmarks"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "UP",   # pyupgrade
+    "ANN",  # flake8-annotations (type hints)
+    "SIM",  # flake8-simplify
+    "TCH",  # flake8-type-checking
+    "TID",  # flake8-tidy-imports (no `from X import *`)
+]
+ignore = [
+    "E402",   # imports after module-level statements — intentional in engine/server (log + constants before heavy imports)
+    "E501",   # line too long — ruff formatter handles this
+    "TC001",  # don't force TYPE_CHECKING blocks — causes runtime errors if misapplied
+    "TC002",
+    "TC003",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = [
+    "ANN",    # type annotations on test functions add noise without value
+    "B",      # bugbear rules relax in tests (unused loop vars, etc.)
+]
+"benchmarks/*" = [
+    "ANN",
+]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "parents"
+
+[tool.ruff.lint.isort]
+known-first-party = ["dlmserve"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = false
+
+# ---------------------------------------------------------------------------
+# Pyright
+# ---------------------------------------------------------------------------
+[tool.pyright]
+pythonVersion = "3.12"
+typeCheckingMode = "strict"
+venvPath = "."
+venv = ".venv"
+include = ["dlmserve", "tests", "benchmarks"]
+exclude = ["**/__pycache__", "**/.venv"]
+reportMissingImports = true
+reportMissingTypeStubs = false       # torch/transformers stubs are incomplete
+reportPrivateImportUsage = false     # torch exports (Generator, bfloat16, etc.) not in stubs
+reportPrivateUsage = false           # internal attrs accessed across module boundaries by design
+reportUnknownMemberType = false      # too noisy with torch tensors
+reportUnknownVariableType = false
+reportUnknownArgumentType = false
+
+# ---------------------------------------------------------------------------
+# Pytest
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+markers = [
+    "slow: tests that load real model weights (skip in fast CI)",
+    "gpu: tests that require a CUDA-capable GPU",
+]

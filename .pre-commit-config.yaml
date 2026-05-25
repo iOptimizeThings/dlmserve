@@ -1,0 +1,25 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.7.0
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format
+
+  - repo: local
+    hooks:
+      - id: pyright
+        name: pyright
+        entry: .venv/bin/pyright
+        language: system
+        types: [python]
+        pass_filenames: false
+        args: [--project, pyproject.toml]
+
+      - id: pytest-fast
+        name: pytest (fast — no slow/gpu markers)
+        entry: .venv/bin/pytest
+        language: system
+        types: [python]
+        pass_filenames: false
+        args: [-m, "not slow and not gpu", --tb=short, -q]

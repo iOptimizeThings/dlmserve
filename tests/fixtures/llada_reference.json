@@ -1,0 +1,23 @@
+{
+  "model_id": "gsai-ml/LLaDA-8B-Instruct",
+  "dtype": "int4_bitsandbytes",
+  "device": "cuda",
+  "mask_token": null,
+  "mdm_mask_token_id": 126336,
+  "mem_after_load": {
+    "allocated_gb": 5.587,
+    "reserved_gb": 5.721,
+    "peak_gb": 5.68
+  },
+  "mem_after_forward": {
+    "allocated_gb": 5.624,
+    "reserved_gb": 6.066,
+    "peak_gb": 5.904
+  },
+  "logits_finite": true,
+  "logits_shape": [
+    1,
+    5,
+    126464
+  ]
+}

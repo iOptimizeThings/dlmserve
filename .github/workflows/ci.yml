@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Install dependencies
+        run: uv sync --no-install-project
+
+      - name: Ruff lint
+        run: uv run ruff check dlmserve tests benchmarks
+
+      - name: Pyright type-check
+        run: uv run pyright dlmserve
+
+      - name: CPU tests
+        run: uv run pytest tests -m "not slow and not gpu" -x -q
+
+  perf:
+    # Manual trigger only — GPU CI is expensive
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: [self-hosted, gpu]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: GPU quality suite
+        env:
+          DLMSERVE_TEST_MODEL: gsai-ml/LLaDA-8B-Instruct
+        run: uv run pytest tests -m "slow and gpu" -x -q
+
+      - name: Perf benchmark
+        run: uv run python benchmarks/perf_ci.py --append-log
