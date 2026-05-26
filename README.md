@@ -3,7 +3,7 @@
 # dlmserve
 
 OpenAI-compatible HTTP serving for diffusion language models.
-LLaDA-8B-Instruct and LLaDA-1.5 in v0.1. Dream-7B in v0.2.0 ([issue #1](https://github.com/iOptimizeThings/dlmserve/issues/1)).
+LLaDA-8B-Instruct and LLaDA-1.5 in v0.1. Dream-7B and DiffuLLaMA in v0.2.0 ([#1](https://github.com/iOptimizeThings/dlmserve/issues/1), [#3](https://github.com/iOptimizeThings/dlmserve/issues/3)).
 
 ## Why
 
@@ -72,7 +72,7 @@ Full numbers, settings, and reproduction: [`docs/benchmarks.md`](https://github.
 | `gsai-ml/LLaDA-8B-Instruct` | ✓ v0.1 | ~5.6 GB |
 | `gsai-ml/LLaDA-1.5` | ✓ v0.1 | ~5.6 GB |
 | `Dream-org/Dream-v0-Instruct-7B` | v0.2.0 ([#1](https://github.com/iOptimizeThings/dlmserve/issues/1)) | ~5.6 GB |
-| `diffusionfamily/diffullama` | v0.2.0 ([#3](https://github.com/iOptimizeThings/dlmserve/issues/3)) | ~5.6 GB INT4 |
+| `diffusionfamily/diffullama` | v0.2.0 ([#3](https://github.com/iOptimizeThings/dlmserve/issues/3)) | ~5.6 GB |
 | `LLaDA-2.0 (inclusionAI)` | v0.3.0 ([#2](https://github.com/iOptimizeThings/dlmserve/issues/2)) | — |
 
 ## Batching
@@ -88,8 +88,8 @@ Diffusion-specific parameters (beyond OpenAI spec):
 
 | Param | Default | Description |
 |---|---|---|
-| `num_denoising_steps` | 16 | More steps = higher quality, lower throughput. Range [1, 64]. |
-| `block_length` | = `max_tokens` | Denoising block size. |
+| `num_denoising_steps` | 128 | More steps = higher quality, lower throughput. Range [1, 1024]. |
+| `block_length` | = `max_tokens` | Denoising block size. Must divide `max_tokens`. |
 | `use_local_leap` | false | LocalLeap anchor-propagation acceleration ([arXiv:2510.07081](https://arxiv.org/abs/2510.07081)). |
 | `force_single_batch` | false | Disable batching for reproducible output. |
 
@@ -124,8 +124,8 @@ Full attribution: [`CREDITS.md`](https://github.com/iOptimizeThings/dlmserve/blo
 ## Roadmap
 
 ```
-v0.2    Dream-7B, DiffuLLaMA INT4, Fast-dLLM KV cache, per-step SSE
-v0.3    LLaDA-2.0, BD3-LMs block diffusion, AdaBlock-dLLM adaptive block size
+v0.2    Dream-7B, DiffuLLaMA INT4
+v0.3    LLaDA-2.0, Fast-dLLM KV cache, per-step SSE, block-diffusion math
 v0.5+   Multi-GPU tensor parallelism
 ```
 
